@@ -42,3 +42,20 @@
     <a href="https://dribbble.com/aldy">Dribbble</a>
   </div>
 </footer>
+from fastapi import FastAPI, UploadFile
+from summarizer import summarize_journal
+from generator import generate_content
+
+app = FastAPI()
+
+@app.post("/summarize/")
+async def summarize(file: UploadFile):
+    content = await file.read()
+    summary = summarize_journal(content)
+    return {"summary": summary}
+
+@app.post("/generate/")
+async def generate(prompt: str):
+    result = generate_content(prompt)
+    return {"content": result}
+
